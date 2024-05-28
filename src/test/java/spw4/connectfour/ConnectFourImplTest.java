@@ -4,7 +4,7 @@ import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class ConnectFourImplTests {
+class ConnectFourImplTest {
     private ConnectFourImpl game;
 
     @BeforeEach
