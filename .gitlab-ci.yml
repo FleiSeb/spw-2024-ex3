@@ -1,6 +1,8 @@
 stages:
   - build
   - test
+  - package
+image: maven:3.9.6-amazoncorretto-21
 
 variables:
   maven_packages_cache: ".m2/repository"
@@ -19,7 +21,6 @@ build:
       - "target/*"
   script:
     - mvn compile
-
 test:
   stage: test
   tags:
@@ -37,3 +38,20 @@ test:
       - "target/site/jacoco/*"
   script:
     - mvn test
+
+package:
+  stage: package
+  tags:
+    - docker
+  dependencies:
+    - test
+  cache:
+    paths:
+      - $maven_packages_cache
+  artifacts:
+    name: $CI_JOB_NAME-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+    expire_in: 1 week
+    paths:
+      - "target/*.war"
+  script:
+    - mvn package
