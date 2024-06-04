@@ -57,7 +57,7 @@ analyze:
       - $maven_packages_cache
   script:
     - mvn sonar:sonar -Dsonar.projectKey=$sonar_project -Dsonar.qualitygate.wait=true
-  allow_failure: true
+  allow_failure: false
 
 package:
   stage: package
