@@ -5,7 +5,7 @@ stages:
   - package
   - deploy
 
-image: maven:3.9.6-amazoncorretto-21
+image: maven:3.9.7-eclipse-temurin-21
 
 variables:
   maven_packages_cache: ".m2/repository"
