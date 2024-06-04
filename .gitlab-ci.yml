@@ -1,15 +1,17 @@
 stages:
   - build
   - test
+  # - analyze
   - package
-  - analyze
   - deploy
+
 image: maven:3.9.6-amazoncorretto-21
 
 variables:
   maven_packages_cache: ".m2/repository"
   MAVEN_OPTS: "-Dmaven.repo.local=./$maven_packages_cache"
-  sonar_project: "connectfour"
+  # sonar_project: "connectfour"
+
 build:
   stage: build
   tags:
@@ -24,6 +26,7 @@ build:
       - "target/*"
   script:
     - mvn compile
+
 test:
   stage: test
   tags:
@@ -42,19 +45,20 @@ test:
   script:
     - mvn test
 
-analyze:
-  stage: analyze
-  tags:
-    - docker
-  dependencies:
-    - build
-    - test
-  cache:
-    paths:
-      - $maven_packages_cache
-  script:
-    - mvn sonar:sonar -Dsonar.projectKey=$sonar_project -Dsonar.qualitygate.wait=true
-  allow_failure: true
+      # analyze:
+      # stage: analyze
+      # tags:
+      # - docker
+      # dependencies:
+      # - build
+      # - test
+      # cache:
+      # paths:
+    # - $maven_packages_cache
+    # script:
+    # - mvn sonar:sonar -Dsonar.projectKey=$sonar_project -Dsonar.qualitygate.wait=true
+  # allow_failure: true
+
 package:
   stage: package
   tags:
@@ -71,6 +75,7 @@ package:
       - "target/*.war"
   script:
     - mvn package
+
 deploy_test:
   stage: deploy
   tags:
@@ -88,6 +93,7 @@ deploy_test:
     - docker image rm -f connect-four
     - docker build -t connect-four .
     - docker run --rm -d --name tomcat -p 8080:8080 connect-four
+
 stop_test:
   stage: deploy
   tags:
