@@ -1,9 +1,9 @@
 SPW4 - Exercise 3
 =================
 
-Name: _____________
+Name: Sebastian Fleischanderl
 
-Effort in hours: __
+Effort in hours: 2
 
 ## 1. Connect Four Web Application and CI/CD Pipeline
 
