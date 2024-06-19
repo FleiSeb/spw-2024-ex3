@@ -12,7 +12,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      - name: Setup JDK 21
+      - name: Setup JDK
         uses: actions/setup-java@v4
         with:
           java-version: '21'
@@ -27,7 +27,8 @@ jobs:
         with:
           name: build-artifact
           path: target/*
-          retention-days: 2
+          retention-days: 7
+
   test:
     runs-on: self-hosted
     needs: build
@@ -35,7 +36,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      - name: Setup JDK 21
+      - name: Setup JDK
         uses: actions/setup-java@v4
         with:
           java-version: '21'
@@ -51,12 +52,6 @@ jobs:
       - name: Test with Maven
         run: mvn test
 
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: test-results
-          path: target/surefire-reports
-
   analyze:
     runs-on: self-hosted
     needs: test
@@ -64,22 +59,16 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      - name: Setup JDK 21
+      - name: Setup JDK
         uses: actions/setup-java@v4
         with:
           java-version: '21'
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Static Analysis with Maven (Example)
+      - name: Static Analysis with Maven
         run: mvn checkstyle:checkstyle findbugs:findbugs pmd:pmd
         continue-on-error: false
-
-      - name: Upload analysis results
-        uses: actions/upload-artifact@v4
-        with:
-          name: analysis-results
-          path: target/
 
   package:
     runs-on: self-hosted
@@ -88,7 +77,7 @@ jobs:
       - name: Checkout Repo
         uses: actions/checkout@v4
 
-      - name: Setup JDK 21
+      - name: Setup JDK
         uses: actions/setup-java@v4
         with:
           java-version: '21'
@@ -103,3 +92,26 @@ jobs:
         with:
           name: package-artifact
           path: target/*.war
+
+  deploy:
+    runs-on: self-hosted
+    needs: package
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Download package artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: package-artifact
+          path: ./target
+
+      - name: Deploy to tomcat
+        run: cp target/ConnectFour.war /usr/local/tomcat/webapps/
