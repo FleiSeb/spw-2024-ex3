@@ -23,4 +23,6 @@ The pipeline works as expected, you can see it runs through all cases required
 ![img.png](docs/gitlab_pipeline_showcase.png)
 
 ### Task 1.c
-
+Pretty much the same pipeline, but now runs on github instead of gitlab
+differs in analyze step => uses maven analyze
+![img.png](docs/Connect4GithubPipeline.png)
