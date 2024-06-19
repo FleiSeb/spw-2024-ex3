@@ -9,12 +9,18 @@ Effort in hours: __
 
 ### Task 1.a
 
-<!--- describe your solution here --->
+Tomcat starts successfully and connect four is playable
+![img.png](docs/tomcat_run_test_works.png)
+Maven Compile: 
+![img.png](docs/maven_compile.png)
+Maven test:
+![img.png](docs/maven_test.png)
+Maven package:
+![img.png](docs/maven_package.png)
 
 ### Task 1.b
-
-<!--- describe your solution here --->
+The pipeline works as expected, you can see it runs through all cases required
+![img.png](docs/gitlab_pipeline_showcase.png)
 
 ### Task 1.c
 
-<!--- describe your solution here --->

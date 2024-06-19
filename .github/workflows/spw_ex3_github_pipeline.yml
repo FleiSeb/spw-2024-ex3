@@ -1,0 +1,26 @@
+name: CI/CD Pipeline SPW_2024_Ex3
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: self-hosted
+    container:
+      image: maven:3.9.7-eclipse-temurin-21
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Set up cache
+        uses: actions/cache@v3
+        with:
+          path: .m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+      - name: Compile
+        run: mvn compile
+    outputs:
+      target: ${{ steps.compile.outputs }}
